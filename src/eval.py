@@ -31,12 +31,21 @@ def eval(args):
 
     # generate results of next year (each day)
     res_day = []
+    res_month = []
     date = []
+    month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+             "Aug", "Sept", "Oct", "Nov", "Dec"]
     curr_data = dataset[-1]
     for day in range(365, 730):
         val = model(curr_data)
         date.append(int2date(2022, day-365))
         res_day.append((val*scale).detach().cpu().numpy())
+
+        # month
+        if day == 395:
+            res_month.append(sum(res_day))
+        elif day in [423, 454, 484, 515, 545, 576, 607, 637, 668, 698, 729]:
+            res_month.append(sum(res_day)-res_month[-1])
 
         # update curr_data
         history = torch.zeros(time_length, 1).to(device)
@@ -46,9 +55,13 @@ def eval(args):
                      "value": 0,
                      "history": history}
 
-    # aggregate to get results of each month & vis results
+    # aggregate to get results of each day/month & vis results
     plt.scatter(date, res_day)
     plt.savefig(os.path.join(os.getcwd(), "results", "estimated_number_day.png"))
+    plt.clf()
+    
+    plt.scatter(month, res_month)
+    plt.savefig(os.path.join(os.getcwd(), "results", "estimated_number_month.png"))
 
 
 if __name__ == "__main__":
