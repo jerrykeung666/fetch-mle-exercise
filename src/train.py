@@ -55,7 +55,7 @@ def train(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--path', type=str, default="/home/wei/codes/fetch-mle-exercise/data/data_daily.csv")
-    parser.add_argument('--epochs', type=int, default=100)
+    parser.add_argument('--epochs', type=int, default=1000)
     parser.add_argument('--time_length', type=int, default=28)
     args = parser.parse_args()
 
